@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<script type="text/javascript">
+			function createDynamicURL() {
+			    return parseInt(Math.random()*1000000000000);
+			}
+		</script>
+		<link id="one" rel="stylesheet" type="text/css" href="">
+		<link id="two" rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<link id="three" rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+		<script type="text/javascript">
+			var url = "/static/style.css?q=" + createDynamicURL().toString();
+			$("#one").attr("href", url)
+		</script>
+	</head>
+	<body>
+		<h1>Flask ChatBot</h1>
+		<div id="container">
+			<div id="chatbox">
+				<p class="botText"><span>Hi! I'm Chatterbot.</span></p>
+				<p class="botText"><span>Please Ask.</span></p>
+			</div>
+			<div id="userInput">
+				<input id="textInput" type="text" name="msg" placeholder="Message">
+				<button id="buttonInput" type="submit"><i class="fa fa-send"></i></button>
+			</div>
+			<script>
+				function getBotResponse() {
+					var rawText = $("#textInput").val();
+					var userHtml = '<p class="userText"><span>' + rawText + '</span></p>';
+					$("#textInput").val("");
+					$("#chatbox").append(userHtml);
+					//$("#chatbox").scrollTop(999999999);
+					$("#chatbox").animate({ scrollTop: $("#chatbox").prop("scrollHeight") }, 700);
+					//document.getElementById('userText').scrollIntoView({block: 'start', behavior: 'smooth'});
+					$.get("/get", { msg: rawText }).done(function(data) {
+						var botHtml = '<p class="botText"><span>' + data + '</span></p>';
+						$("#chatbox").append(botHtml);
+						//$("#chatbox").scrollTop(999999999);
+						$("#chatbox").animate({ scrollTop: $("#chatbox").prop("scrollHeight") }, 700);
+						//document.getElementById('userInput').scrollIntoView({block: 'start', behavior: 'smooth'});
+					});
+				}
+				$("#textInput").keypress(function(e) {
+					if(e.which == 13) {
+						getBotResponse();
+					}
+				});
+				$("#buttonInput").click(function() {
+					getBotResponse();
+				})
+			</script>
+		</div>
+	</body>
+</html>
