@@ -1,4 +1,4 @@
 Flask==1.1.2
 requests==2.24.0
 gunicorn==20.0.4
-rasa==1.10.7
+rasa==2.8.10
